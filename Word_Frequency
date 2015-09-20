@@ -1,0 +1,69 @@
+import java.util.Hashtable;
+
+public class CodeVueTest {
+
+    public static void main(String args[]) {
+
+        // Design a method to find the frequency of occurrences of any given word in a book.
+        // You can assume the book has been parsed into an array of words.  i.e.  String book[]
+        // where book[] is an array of words contained in the book.  Your solution should ignore
+        // the case of the word when calculating the count.
+
+
+        String book[] = {"hui","jmkop","tyuiv","a","mnew","po","qabn","tyuiv",
+                "A","remn","of","mnew","hui","Tyuiv","Piper","rtn",
+                "if","Rtn","Piper","poPUi","a","peck","of","ermnew","popui",
+                "qabn","rtm","rtn","hui","of","mnew","tyuiv","opert","huiee","tyuive"};
+
+
+
+        CodeVueTest test = new CodeVueTest();
+        Hashtable<String, Integer> words = test.setupDictionary(book);
+
+        System.out.println(test.getFrequency(words, "hui"));        // answer: 3
+        System.out.println(test.getFrequency(words, "qabn"));       // answer: 2
+        System.out.println(test.getFrequency(words, "tyuiv"));      // answer: 4
+        System.out.println(test.getFrequency(words, "poPui"));      // answer: 2
+
+    }
+
+    // function to get the frequecy of the given word
+    private String getFrequency(Hashtable<String, Integer> words, String word) {
+        String s="";
+        // converting to lowerCase to ignore Case senstivity
+        word = word.toLowerCase();
+        // checking if the word is present
+        if( words.containsKey(word)){
+            // appending the string with content
+            s = "answer: " + words.get(word);
+        }
+        // returning the string
+        return s;
+    }
+
+    // function to populate the hashtable with the frequency
+    private Hashtable<String, Integer> setupDictionary(String[] book) {
+        //creating the Hastable
+        Hashtable<String,Integer> table = new Hashtable<String, Integer>();
+        int count =0;
+        //looping for each word
+        for( String string : book){
+            // converting to lowerCase to ignore Case senstivity
+            string = string.toLowerCase();
+            // if the word is not present in the hastable, then adding 1 as the count
+            if(!table.containsKey(string)){
+                table.put(string, 1);
+            }
+            // the word is present in the hashtable, so incrementing the count
+            else{
+                count = table.get(string);
+                count++;
+                // storing the incremented count back to hashtable
+                table.put(string, count);
+            }
+        }
+        // returning the hashtable
+        return table;
+    }
+}
+
