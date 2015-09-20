@@ -1,0 +1,32 @@
+/**
+ * Created by ravikumarsingh on 9/15/15.
+ */
+public class FizzBuzz {
+    private static void printingFizzBuzz(int number) {
+
+        String text = "7 2 3";
+        String[] strArray = text.split(" ");
+        int num=0;
+
+            num = Integer.parseInt(strArray[0]);
+
+        System.out.println("test"+ num);
+        StringBuilder sb = new StringBuilder();
+        for ( int i = 1 ; i <= number ; i++ ) {
+            if( i % 15 == 0 ){ // number is multiple pf 15
+                sb.append("FizzBuzz" + " ");
+            } else if( i % 5 == 0 ) { // number is multiple of 5
+                sb.append("Buzz" + " ");
+            } else if( i % 3 == 0 &&) { // number is multiple of 3
+                sb.append("Fizz" + " ");
+            } else { // number is neither multiple of 3 or 5 now 15
+                sb.append(i + " ");
+            }
+        }
+        System.out.println(sb);
+    }
+
+    public static void main(String[] args) {
+        printingFizzBuzz(30);
+    }
+}
