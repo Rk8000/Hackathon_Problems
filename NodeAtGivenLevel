@@ -1,0 +1,114 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+/**
+ * The Node class creates node of the tree
+ *
+ * @author  Ravi Kumar Singh
+ * @version 1.0
+ * @since   2015-04-06
+ */
+
+class Node{
+
+    int data;
+    Node left;
+    Node right;
+
+}
+
+/**
+ * The NodeAtGivenLevel class is to create the Binary search tree
+ *
+ * @author  Ravi Kumar Singh
+ * @version 1.0
+ * @since   2015-04-06
+ */
+
+public class NodeAtGivenLevel {
+    /**
+     * insertNode to insert the Node to tree
+     * @param key
+     * @return void
+     */
+    public Node insertNode(int key) {
+        Node temp = new Node();
+        temp.data = key;
+        temp.left = null;
+        temp.right =null;
+        return temp;
+    }
+
+    /**
+     * inOrderTraversal to for inOrderTraversal for Tree
+     * @param root
+     * @return void
+     */
+    public void inOrderTraversal(Node root){
+        if( root == null){
+            return;
+        }
+        inOrderTraversal(root.left);
+        System.out.println(root.data);
+        inOrderTraversal(root.right);
+    }
+
+    public void levelOrderTraversal(Node root, int level){
+        //base condition
+        if( root == null){
+            return;
+        }
+        // root has a level as 1
+        int height = 1;
+        Queue<Node> queue = new LinkedList<Node>();
+        // adding the root into the queue
+        queue.add(root);
+
+        while (true){
+            // number of nodes in the level
+            int numberOfNode = queue.size();
+            // printing all the nodes present on the given level
+            if( height == level){
+                for( Node node : queue){
+                    System.out.print("node " + node.data);
+                }
+            }
+            // reaching to end
+            if( numberOfNode==0 ){
+                break;
+            }
+            // Dequeue all the nodes of current level and enqueue all the nodes of next level
+            while (numberOfNode > 0){
+                Node nodeToRemove = queue.peek();
+                queue.poll();
+                if( nodeToRemove.left != null){
+                    queue.add(nodeToRemove.left);
+                }
+                if( nodeToRemove.right != null){
+                    queue.add(nodeToRemove.right);
+                }
+                numberOfNode--;
+            }
+            // incrementing the height
+            height++;
+        }
+
+    }
+
+    public static void main(String[] args) {
+
+        NodeAtGivenLevel tree = new NodeAtGivenLevel();
+        Node root = tree.insertNode(1);
+        root.left = tree.insertNode(2);
+        root.right = tree.insertNode(3);
+        root.left.left = tree.insertNode(4);
+        root.left.left.left = tree.insertNode(8);
+        root.left.right = tree.insertNode(5);
+        root.right.right = tree.insertNode(6);
+        root.right.right.right = tree.insertNode(7);
+
+        tree.inOrderTraversal(root);
+        tree.levelOrderTraversal(root, 1);
+
+    }
+}
