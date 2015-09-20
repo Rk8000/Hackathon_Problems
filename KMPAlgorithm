@@ -1,0 +1,104 @@
+import java.util.ArrayList;
+
+/**
+ * The KMPAlgorithm class to implements pattern matching in the text using KMP algorithm
+ *
+ * @author  Ravi Kumar Singh
+ * @version 1.0
+ * @since   2015-04-06
+ */
+public class KMPAlgorithm {
+
+    /**
+     * Finding the index of the matches using KMP algorithm
+     *
+     * @param text, pattern
+     */
+    private static ArrayList<Integer> KMPAlgo(String text, String pattern) {
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        boolean matched = false; // variable for checking the match or not match
+        int n = text.length(); // length of the text
+        int m = pattern.length(); // length of the pattern
+        int[] patternTable = new int[m]; // filling the partial match table
+        int i = 0;
+
+        patternTable = filling_The_Partial_Match_Table(pattern);
+
+        for ( int j = 0; j < n ;j++){
+            // if the characters don't matches, then making current longest Prefix to the previous longest Prefix
+            while( i > 0 && pattern.charAt(i) != text.charAt(j)){
+                i = patternTable[i-1]; // skipping
+            }
+            // if the char matches, then increasing the longest Prefix found (i)
+            if( pattern.charAt(i) == text.charAt(j)){
+                i = i+1;
+            }
+            // if the i becomes to the length of the pattern, means we got the first match
+            if( i == m){
+                int index = j-m+1; // matching index
+                matched = true;
+                System.out.println("pattern has matched at " + index);
+                indexes.add(index);
+                i = patternTable[i-1]; // starting the next loop
+            }
+        }
+        // Pattern is not present in the text
+        if( matched == false){
+            System.out.println("pattern has not matched in the Text!");
+            indexes.add(-1);
+        }
+        return indexes;
+    }
+
+    /**
+     * Function to fill the partial matching table
+     *
+     * @param pattern
+     */
+    private static int[] filling_The_Partial_Match_Table(String pattern) {
+        int m = pattern.length(); // length of the pattern
+        int[] pmt = new int[m];
+        pmt[0] = 0; // making the first entry in partial matching tables as 0
+        int i= 0; // longest Prefix found in the pattern
+        // variable j is the current position in the pattern
+        for( int j = 1 ; j < m ;j ++ ){
+            // if the characters don't matches, then making current longest Prefix to the previous longest Prefix
+            while( i > 0 && pattern.charAt(i) != pattern.charAt(j)){
+                i = pmt[i-1];
+            }
+            // if the char matches, then increasing the longest Prefix found (i)
+            if(pattern.charAt(i) == pattern.charAt(j)){
+                i = i+1;
+            }
+            // assigning longest Prefix to the pmt array
+            pmt[j] = i;
+        }
+        return pmt;
+    }
+
+    /**
+     * The main method begins execution of the tests.
+     *
+     * @param args not used
+     */
+    public static void main(String[] args) {
+        String text = "ABC ABCDAB RAVIABCDABDRAVI RAJUBCDABD REENABCDABDREENA ASHABCDBDASHA AZADABCDABDAZAD";
+        String pattern ="ABCABD";
+
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        int m = pattern.length();
+        StringBuilder  sb = new StringBuilder(text);
+        //calling the KMP algorithm function
+        indexes =KMPAlgo(text, pattern);
+        int i =0;
+        if( indexes.get(0) != -1 ) {
+            for ( int index : indexes ) {
+                int start = index - i * m;
+                int end = start + m;
+                sb.replace( start, end, "" );
+                i++;
+            }
+        }
+        System.out.println(sb);
+    }
+}
