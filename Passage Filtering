@@ -1,0 +1,95 @@
+import java.io.*;
+import java.util.ArrayList;
+
+public class Main {
+
+    private static boolean KMPAlgo(String text, String pattern) {
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        boolean matched = false; // variable for checking the match or not match
+        int n = text.length(); // length of the text
+        int m = pattern.length(); // length of the pattern
+        int[] patternTable = new int[m]; // filling the partial match table
+        int i = 0;
+
+        patternTable = filling_The_Partial_Match_Table(pattern);
+
+        for ( int j = 0; j < n ;j++){
+            // if the characters don't matches, then making current longest Prefix to the previous longest Prefix
+            while( i > 0 && pattern.toLowerCase().charAt(i) != text.toLowerCase().charAt(j)){
+                i = patternTable[i-1]; // skipping
+            }
+            // if the char matches, then increasing the longest Prefix found (i)
+            if( pattern.toLowerCase().charAt(i) == text.toLowerCase().charAt(j)){
+                i = i+1;
+            }
+            // if the i becomes to the length of the pattern, means we got the first match
+            if( i == m){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Function to fill the partial matching table
+     *
+     * @param pattern
+     */
+    private static int[] filling_The_Partial_Match_Table(String pattern) {
+        int m = pattern.length(); // length of the pattern
+        int[] pmt = new int[m];
+        pmt[0] = 0; // making the first entry in partial matching tables as 0
+        int i= 0; // longest Prefix found in the pattern
+        // variable j is the current position in the pattern
+        for( int j = 1 ; j < m ;j ++ ){
+            // if the characters don't matches, then making current longest Prefix to the previous longest Prefix
+            while( i > 0 && pattern.charAt(i) != pattern.charAt(j)){
+                i = pmt[i-1];
+            }
+            // if the char matches, then increasing the longest Prefix found (i)
+            if(pattern.charAt(i) == pattern.charAt(j)){
+                i = i+1;
+            }
+            // assigning longest Prefix to the pmt array
+            pmt[j] = i;
+        }
+        return pmt;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String s;
+        while ((s = in.readLine()) != null) {
+            String[]tokens = s.split("\\|");
+            StringBuilder  sb = new StringBuilder();
+            int maxLength =0;
+            int length =0;
+            int index =0;
+            for ( int i =0 ; i < tokens.length ;i++){
+                length = tokens[i].length();
+                if( length > maxLength){
+                    maxLength = length;
+                    index =i;
+                }
+            }
+            sb.append(tokens[index]).append("|");
+            String textToSearch = tokens[index];
+
+            for ( int i =0 ; i < tokens.length ;i++){
+                if( i != index){
+                    String pattern = tokens[i];
+                    pattern = pattern.replace(';',',');
+                    boolean trueOrFalse = KMPAlgo(textToSearch, pattern);
+                    if(trueOrFalse){
+                        continue;
+                    } else{
+                        sb.append(tokens[i]);
+                    }
+                }else {
+                    continue;
+                }
+            }
+            System.out.println(sb.toString());
+        }
+    }
+}
