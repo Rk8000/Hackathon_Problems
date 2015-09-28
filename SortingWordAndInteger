@@ -1,0 +1,68 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.TreeSet;
+
+/**
+ * Created by ravikumarsingh on 9/26/15.
+ */
+public class Sorter {
+    public static void main(String[] args) {
+        String str = "";
+        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+
+	    /* Read the input string */
+        try{
+            str = bufferRead.readLine();
+        }catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        // if the string is empty then return
+        if( str == " "){
+            return;
+        }
+
+        // creating two treeSet for Integer and words and one ArrayList for all words
+        TreeSet<String> treeSet = new TreeSet<String>();
+        TreeSet<Integer> integerTreeSet = new TreeSet<Integer>();
+        ArrayList<String> allWords = new ArrayList<String>();
+
+        // if the string is number then add into integerTreeSet else to wordTreeSet and also add to allWords Arraylist
+        String[] strings = str.split(" ");
+        for( int i =0 ; i < strings.length ;i++){
+            if(isNumber(strings[i])){
+                integerTreeSet.add(Integer.parseInt(strings[i]));
+            } else {
+                treeSet.add(strings[i]);
+            }
+            allWords.add(strings[i]);
+        }
+
+        // replacing the allwords Arraylist with the sorted integer and words
+        for( int i = 0 ; i < allWords.size() ;i++ ){
+            if(isNumber(allWords.get(i))){
+                allWords.set(i, String.valueOf(integerTreeSet.pollFirst()));
+            } else {
+                allWords.set(i,treeSet.pollFirst());
+            }
+        }
+
+        // printing the ArrayList
+        for( int i =0 ; i < allWords.size() ;i++ ){
+            System.out.print(allWords.get(i) + " ");
+        }
+    }
+
+    // Function to check if the String contains any integer or not
+    private static boolean isNumber(String string) {
+        if(string.matches(".*\\d.*")){
+            // contains integer
+            return true;
+        } else{
+            // doesn't contain integer
+            return false;
+        }
+    }
+}
